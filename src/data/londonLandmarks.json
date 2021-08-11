@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "name": "Big Ben",
+        "latlng": {
+            "latitude": 51.500782626551675,
+            "longitude": -0.12552662330828043
+        },
+        "description": "Big Ben is the nickname for the Great Bell of the striking clock at the north end of the Palace of Westminster; the name is frequently extended to also refer to the clock and the clock tower. The official name of the tower in which Big Ben is located was originally the Clock Tower; it was renamed Elizabeth Tower in 2012 to mark the Diamond Jubilee of Elizabeth II, Queen of the United Kingdom.",
+        "image": "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+    },
+    {
+        "id": 2,
+        "name": "National Gallery",
+        "latlng": {
+            "latitude": 51.50890357879391,
+            "longitude": -0.12850203078005293
+        },
+        "description": "The National Gallery is an art museum in Trafalgar Square in the City of Westminster, in Central London. Founded in 1824, it houses a collection of over 2,300 paintings dating from the mid-13th century to 1900.",
+        "image": "https://images.pexels.com/photos/4094000/pexels-photo-4094000.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    },
+    {
+        "id": 3,
+        "name": "Buckingham Palace",
+        "latlng": {
+            "latitude": 51.50112240771424,
+            "longitude": -0.14135723958435054
+        },
+        "description": "Buckingham Palace is the London residence and administrative headquarters of the monarch of the United Kingdom. Located in the City of Westminster, the palace is often at the centre of state occasions and royal hospitality. It has been a focal point for the British people at times of national rejoicing and mourning.",
+        "image": "https://images.pexels.com/photos/3960662/pexels-photo-3960662.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+    },
+    {
+        "id": 4,
+        "name": "Tower Bridge",
+        "latlng": {
+            "latitude": 51.505737740072995,
+            "longitude": -0.07520694901800379
+        },
+        "description": "Tower Bridge is a combined bascule and suspension bridge in London, built between 1886 and 1894. The bridge crosses the River Thames close to the Tower of London and has become a world-famous symbol of London. As a result, it is sometimes confused with London Bridge, about 0.5 miles (0.80 km) upstream. Tower Bridge is one of five London bridges owned and maintained by the Bridge House Estates, a charitable trust overseen by the City of London Corporation. It is the only one of the trust's bridges not to connect the City of London directly to the Southwark bank, as its northern landfall is in Tower Hamlets.",
+        "image": "https://images.pexels.com/photos/1563230/pexels-photo-1563230.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+    },
+    {
+        "id": 5,
+        "name": "The British Museum",
+        "latlng": {
+            "latitude": 51.518879163719944,
+            "longitude": -0.12630217259903156
+        },
+        "description": "The British Museum, in the Bloomsbury area of London, England, is a public institution dedicated to human history, art and culture. Its permanent collection of some eight million works is among the largest and most comprehensive in existence, having been widely collected during the era of the British Empire. It documents the story of human culture from its beginnings to the present. It was the first public national museum in the world.",
+        "image": "https://images.pexels.com/photos/2815035/pexels-photo-2815035.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+    }
+]
