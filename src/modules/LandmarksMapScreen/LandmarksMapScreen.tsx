@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, Alert, Image, FlatList} from 'react-native';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface regionObj {
   latitude: number;
