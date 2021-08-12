@@ -1,30 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Alert, Image, FlatList} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import MapView from 'react-native-maps';
 import {Marker} from 'react-native-maps';
+import {CustomMarkerView} from '../LandmarksMapScreen/CustomMarkerView';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-interface regionObj {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-}
-
-interface markerObj {
-  id: number;
-  name: string;
-  latlng: {
-    latitude: number;
-    longitude: number;
-  };
-  description: string;
-  image: string;
-}
-
-interface markersFlatList {
-  item: markerObj;
-}
+import {
+  regionObj,
+  markerObj,
+  markersFlatList,
+} from '../../utilities/interfaces';
 
 export const LandmarksMapScreen: React.FC = () => {
   const [region, setRegion] = useState<regionObj>({
@@ -40,6 +32,31 @@ export const LandmarksMapScreen: React.FC = () => {
     setRegion(region);
   }
 
+  function addProperty() {
+    let newMarkersArray = [...markers];
+    newMarkersArray.forEach(x => {
+      x.favourite = false;
+      x.selectedMarker = false;
+    });
+    setMarkers(newMarkersArray);
+  }
+
+  function setFavourite(id: number) {
+    let newMarkersArray = [...markers];
+    newMarkersArray.forEach(x => {
+      x.id === id ? (x.favourite = !x.favourite) : (x.favourite = false);
+    });
+    setMarkers(newMarkersArray);
+  }
+
+  function setSelectedMarker(id: number) {
+    let newMarkersArray = [...markers];
+    newMarkersArray.forEach(x => {
+      x.id === id ? (x.selectedMarker = true) : (x.selectedMarker = false);
+    });
+    setMarkers(newMarkersArray);
+  }
+
   useEffect(() => {
     fetch('http://localhost:8000/markers')
       .then(response => {
@@ -50,6 +67,9 @@ export const LandmarksMapScreen: React.FC = () => {
       })
       .then(data => {
         setMarkers(data);
+      })
+      .then(()=> {
+        addProperty();
       })
       .catch(err => {
         Alert.alert('Could not fetch data for that resourse');
@@ -65,17 +85,35 @@ export const LandmarksMapScreen: React.FC = () => {
 
   const renderItem: React.FC<markersFlatList> = ({item}) => {
     return (
-      <View style={{borderWidth: 0}}>
-        <Image
-          style={{
-            width: 220,
-            height: 140,
-            resizeMode: 'cover',
-            borderRadius: 10,
-            margin: 5,
-          }}
-          source={{uri: item.image}}
-        />
+      <View>
+        <TouchableOpacity onPress={() => setFavourite(item.id)}>
+          <Image
+            style={{
+              width: 220,
+              height: 140,
+              resizeMode: 'cover',
+              borderRadius: 10,
+              margin: 5,
+            }}
+            source={{uri: item.image}}
+          />
+          {!item.favourite && (
+            <Icon
+              name="heart-o"
+              size={18}
+              color="red"
+              style={{position: 'absolute', marginTop: 10, marginLeft: 10}}
+            />
+          )}
+          {item.favourite && (
+            <Icon
+              name="heart"
+              size={18}
+              color="red"
+              style={{position: 'absolute', marginTop: 10, marginLeft: 10}}
+            />
+          )}
+        </TouchableOpacity>
       </View>
     );
   };
@@ -91,8 +129,12 @@ export const LandmarksMapScreen: React.FC = () => {
               key={index}
               coordinate={marker.latlng}
               title={marker.name}
-              description={marker.description}
-            />
+              onSelect={() => setSelectedMarker(marker.id)}>
+              <CustomMarkerView
+                interestedPlace={marker.favourite}
+                selectedMarker={marker.selectedMarker}
+              />
+            </Marker>
           ))}
         </MapView>
       </View>
