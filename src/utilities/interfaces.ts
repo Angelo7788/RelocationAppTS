@@ -15,7 +15,7 @@ export interface markerObj {
   description: string;
   image: string;
   favourite?: boolean;
-  selectedMarker: boolean;
+  selectedMarker?: boolean;
 }
 
 export interface markersFlatList {

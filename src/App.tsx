@@ -1,13 +1,14 @@
- import React from 'react';
- import { View, Text } from 'react-native';
- import { LandmarksMapScreen } from './modules/LandmarksMapScreen';
- import Nav from './MainNavigator';
+import React from 'react';
+import Nav from './MainNavigator';
+import {Provider} from 'react-redux';
+import {store} from './reducer/store';
 
+const App = () => {
+  return (
+    <Provider store={store}>
+      <Nav />
+    </Provider>
+  );
+};
 
- const App = () => {
-   return (
-     <Nav />
-   )
- };
-
- export default App;
+export default App;
