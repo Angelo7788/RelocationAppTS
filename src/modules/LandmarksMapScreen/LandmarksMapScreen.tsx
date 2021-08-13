@@ -17,8 +17,9 @@ import {
   markerObj,
   markersFlatList,
 } from '../../utilities/interfaces';
+import { Props } from '../../utilities/types';
 
-export const LandmarksMapScreen: React.FC = () => {
+export const LandmarksMapScreen = ({navigation}: Props) => {
   const [region, setRegion] = useState<regionObj>({
     latitude: 51.509865,
     longitude: -0.118092,
@@ -86,7 +87,10 @@ export const LandmarksMapScreen: React.FC = () => {
   const renderItem: React.FC<markersFlatList> = ({item}) => {
     return (
       <View>
-        <TouchableOpacity onPress={() => setFavourite(item.id)}>
+        <TouchableOpacity onPress={() => {
+          setFavourite(item.id);
+          navigation.navigate('DetailScreen');
+        }}>
           <Image
             style={{
               width: 220,
