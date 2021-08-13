@@ -26,3 +26,13 @@ export interface markersView {
   interestedPlace: boolean | undefined;
   selectedMarker: boolean | undefined;
 }
+
+export interface LandmarkMarkers {
+  selectedLandmark: SelectedLandmark;
+  markersArray: markerObj[];
+  heartedList: markerObj[];
+}
+
+export interface SelectedLandmark {
+  id: number;
+}

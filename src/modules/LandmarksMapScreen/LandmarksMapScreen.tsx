@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Text,
   View,
   StyleSheet,
   Alert,
@@ -17,9 +16,27 @@ import {
   markerObj,
   markersFlatList,
 } from '../../utilities/interfaces';
-import { Props } from '../../utilities/types';
+import {Props} from '../../utilities/types';
+import {useAppDispatch, useAppSelector} from '../../reducer/hooks';
+import {
+  loadLandmarksState,
+  setSelectedMarker,
+  setSelectedLandmark,
+} from '../../reducer/LandmarksReducer';
 
 export const LandmarksMapScreen = ({navigation}: Props) => {
+  const LandmarksState = useAppSelector(state => state.landmarks.markersArray);
+
+  const dispatch = useAppDispatch();
+  const loadMarkersArray: Function = (init: markerObj) =>
+    dispatch(loadLandmarksState(init));
+
+  const setSelectedMarkerView: Function = (id: number) =>
+    dispatch(setSelectedMarker(id));
+
+  const setSelectedLandmarkToView: Function = (id: number) =>
+    dispatch(setSelectedLandmark(id));
+
   const [region, setRegion] = useState<regionObj>({
     latitude: 51.509865,
     longitude: -0.118092,
@@ -27,35 +44,8 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
     longitudeDelta: 0.0421,
   });
 
-  const [markers, setMarkers] = useState<markerObj[]>([]);
-
   function onRegionChange(region: regionObj) {
     setRegion(region);
-  }
-
-  function addProperty() {
-    let newMarkersArray = [...markers];
-    newMarkersArray.forEach(x => {
-      x.favourite = false;
-      x.selectedMarker = false;
-    });
-    setMarkers(newMarkersArray);
-  }
-
-  function setFavourite(id: number) {
-    let newMarkersArray = [...markers];
-    newMarkersArray.forEach(x => {
-      x.id === id ? (x.favourite = !x.favourite) : (x.favourite = false);
-    });
-    setMarkers(newMarkersArray);
-  }
-
-  function setSelectedMarker(id: number) {
-    let newMarkersArray = [...markers];
-    newMarkersArray.forEach(x => {
-      x.id === id ? (x.selectedMarker = true) : (x.selectedMarker = false);
-    });
-    setMarkers(newMarkersArray);
   }
 
   useEffect(() => {
@@ -67,10 +57,7 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
         return response.json();
       })
       .then(data => {
-        setMarkers(data);
-      })
-      .then(()=> {
-        addProperty();
+        loadMarkersArray(data);
       })
       .catch(err => {
         Alert.alert('Could not fetch data for that resourse');
@@ -87,10 +74,11 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
   const renderItem: React.FC<markersFlatList> = ({item}) => {
     return (
       <View>
-        <TouchableOpacity onPress={() => {
-          setFavourite(item.id);
-          navigation.navigate('DetailScreen');
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedLandmarkToView(item.id);
+            navigation.navigate('DetailScreen');
+          }}>
           <Image
             style={{
               width: 220,
@@ -123,17 +111,17 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
   };
   return (
     <View>
-      <View style={{height: '80%', width: '100%'}}>
+      <View style={{height: '78%', width: '100%'}}>
         <MapView
           style={styles.map}
           region={region}
           onRegionChange={onRegionChange}>
-          {markers.map((marker, index) => (
+          {LandmarksState.map((marker, index) => (
             <Marker
               key={index}
               coordinate={marker.latlng}
               title={marker.name}
-              onSelect={() => setSelectedMarker(marker.id)}>
+              onSelect={() => setSelectedMarkerView(marker.id)}>
               <CustomMarkerView
                 interestedPlace={marker.favourite}
                 selectedMarker={marker.selectedMarker}
@@ -145,7 +133,7 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
       <View>
         <FlatList
           renderItem={renderItem}
-          data={markers}
+          data={LandmarksState}
           keyExtractor={item => String(item.id)}
           horizontal={true}
         />
