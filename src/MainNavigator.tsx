@@ -16,9 +16,17 @@ const HomeStack = createNativeStackNavigator<RootStackParamList>();
 export default function Nav() {
   return (
     <NavigationContainer>
-      <HomeStack.Navigator initialRouteName="MapScreen">
-        <HomeStack.Screen name="MapScreen" component={LandmarksMapScreen} />
-        <HomeStack.Screen name="DetailScreen" component={DetailsScreen} />
+      <HomeStack.Navigator 
+        initialRouteName="MapScreen"
+        >
+        <HomeStack.Screen 
+          name="MapScreen" 
+          component={LandmarksMapScreen}
+          options={{ title: "Landmarks Map"}} />
+        <HomeStack.Screen 
+          name="DetailScreen" 
+          component={DetailsScreen}
+          />
       </HomeStack.Navigator>
     </NavigationContainer>
   );

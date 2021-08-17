@@ -7,6 +7,7 @@ import {
 import {useAppDispatch, useAppSelector} from '../../reducer/hooks';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {setFavouriteLandmark} from '../../reducer/LandmarksReducer';
+import { Props } from '../../utilities/types';
 
 export const DetailsScreen = () => {
 

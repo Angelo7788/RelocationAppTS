@@ -23,6 +23,7 @@ import {
   setSelectedMarker,
   setSelectedLandmark,
 } from '../../reducer/LandmarksReducer';
+import { styles } from './styles/LandmarksMapScreenStyles';
 
 export const LandmarksMapScreen = ({navigation}: Props) => {
   const LandmarksState = useAppSelector(state => state.landmarks.markersArray);
@@ -64,14 +65,21 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
       });
   }, []);
 
-  const styles = StyleSheet.create({
-    map: {
-      width: '100%',
-      height: '100%',
-    },
-  });
+  // FlatList  scroll to item // center the view to do????
+  const [refFlatList, setRefFlatList] = useState<any>();
+
+  const getItemLayout = (_data: any, index : number) => {
+      return {length: 220, offset: 220 * index, index}
+  }
+
+  const onScrollToItemSelected: Function = (index: number) => {
+    refFlatList.scrollToIndex({animated: true, index: index});
+  }
+
+  // *** //
 
   const renderItem: React.FC<markersFlatList> = ({item}) => {
+    const id = item.id
     return (
       <View>
         <TouchableOpacity
@@ -80,13 +88,7 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
             navigation.navigate('DetailScreen');
           }}>
           <Image
-            style={{
-              width: 220,
-              height: 140,
-              resizeMode: 'cover',
-              borderRadius: 10,
-              margin: 5,
-            }}
+            style={styles.image }
             source={{uri: item.image}}
           />
           {!item.favourite && (
@@ -121,7 +123,10 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
               key={index}
               coordinate={marker.latlng}
               title={marker.name}
-              onSelect={() => setSelectedMarkerView(marker.id)}>
+              onSelect={() => {
+                setSelectedMarkerView(marker.id);
+                onScrollToItemSelected(index);
+              }}>
               <CustomMarkerView
                 interestedPlace={marker.favourite}
                 selectedMarker={marker.selectedMarker}
@@ -136,6 +141,9 @@ export const LandmarksMapScreen = ({navigation}: Props) => {
           data={LandmarksState}
           keyExtractor={item => String(item.id)}
           horizontal={true}
+          getItemLayout={getItemLayout}
+          ref={(ref) => setRefFlatList(ref)}
+
         />
       </View>
     </View>
