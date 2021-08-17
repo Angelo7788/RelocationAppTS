@@ -1,11 +1,11 @@
-export interface regionObj {
+export interface RegionObj {
   latitude: number;
   longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
 }
 
-export interface markerObj {
+export interface MarkerObj {
   id: number;
   name: string;
   latlng: {
@@ -18,19 +18,19 @@ export interface markerObj {
   selectedMarker?: boolean;
 }
 
-export interface markersFlatList {
-  item: markerObj;
+export interface MarkersFlatList {
+  item: MarkerObj;
 }
 
-export interface markersView {
+export interface MarkersView {
   interestedPlace: boolean | undefined;
   selectedMarker: boolean | undefined;
 }
 
 export interface LandmarkMarkers {
   selectedLandmark: SelectedLandmark;
-  markersArray: markerObj[];
-  heartedList: markerObj[];
+  markersArray: MarkerObj[];
+  heartedList: MarkerObj[];
 }
 
 export interface SelectedLandmark {

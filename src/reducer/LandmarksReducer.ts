@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {markerObj} from '../utilities/interfaces';
+import {MarkerObj} from '../utilities/interfaces';
 import type {RootState} from './store';
 import { LandmarkMarkers, SelectedLandmark } from '../utilities/interfaces';
 
@@ -14,8 +14,8 @@ export const landMarksSlice = createSlice({
   initialState,
 
   reducers: {
-    loadLandmarksState: (state, action: PayloadAction<markerObj>) => {
-      let load: markerObj[] = [];
+    loadLandmarksState: (state, action: PayloadAction<MarkerObj>) => {
+      let load: MarkerObj[] = [];
       load = action.payload;
       load.forEach(element => {
         element.favourite = false;
@@ -24,7 +24,7 @@ export const landMarksSlice = createSlice({
       state.markersArray = load;
     },
     setSelectedMarker: (state, action: PayloadAction<number>) => {
-      let arrayToModify: markerObj[] = [...state.markersArray];
+      let arrayToModify: MarkerObj[] = [...state.markersArray];
       arrayToModify.forEach(x => {
         x.id === action.payload
           ? (x.selectedMarker = true)
@@ -33,8 +33,8 @@ export const landMarksSlice = createSlice({
       state.markersArray = arrayToModify;
     },
     setFavouriteLandmark: (state, action: PayloadAction<number>) => {
-      let arrayToModify: markerObj[] = [...state.markersArray];
-      let newHeartedList: markerObj[] = [];
+      let arrayToModify: MarkerObj[] = [...state.markersArray];
+      let newHeartedList: MarkerObj[] = [];
       arrayToModify.forEach(x => {
           if (x.id === action.payload) {x.favourite = !x.favourite}
           if (x.favourite === true) {newHeartedList.push(x)}

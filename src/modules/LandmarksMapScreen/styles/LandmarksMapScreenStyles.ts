@@ -12,4 +12,5 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 5,
   },
+  icon: {position: 'absolute', marginTop: 10, marginLeft: 10},
 });

@@ -1,74 +1,53 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  Image,
-} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../../reducer/hooks';
+import React, {useState} from 'react';
+import {useAppDispatch} from '../../reducer/hooks';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {setFavouriteLandmark} from '../../reducer/LandmarksReducer';
-import { Props } from '../../utilities/types';
+import {RouteProp} from '@react-navigation/core';
+import {RootStackParamList} from '../../MainNavigator';
+import {MarkerObj} from '../../utilities/interfaces';
+import {
+  MainContainer,
+  Description,
+  TitleLabel,
+  HeartMarker,
+  MarkerImage,
+} from './styles/DetailsScreenStyles';
 
-export const DetailsScreen = () => {
+type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'MapScreen'>;
 
-  const LandmarksState = useAppSelector(state => state.landmarks.markersArray);
+export type DetailsScreenProps = {
+  route: DetailsScreenRouteProp;
+};
 
-  const SelectedLandmark = useAppSelector(
-    state => state.landmarks.selectedLandmark.id,
-  );
+export const DetailsScreen: React.FC<DetailsScreenProps> = ({route}) => {
+  const {landmark: landmarkObjToDisplay}: {landmark: MarkerObj} =
+    route!.params!;
 
-  const landmarkToViewArray = LandmarksState.filter(
-    x => x.id === SelectedLandmark,
-  );
-  const landmarkObjToDisplay = landmarkToViewArray[0];
+  const [loved, setLoved] = useState(landmarkObjToDisplay.favourite);
 
   const dispatch = useAppDispatch();
   const setFavouriteLandmarkView: Function = (id: number) =>
     dispatch(setFavouriteLandmark(id));
 
+  const onLoved = () => {
+    setLoved(previousLoved => !previousLoved);
+    setFavouriteLandmarkView(landmarkObjToDisplay.id);
+  };
   return (
-    <View style={{marginTop: 10}}>
-      <Image
-        style={{
-          width: '90%',
-          height: '50%',
-          resizeMode: 'cover',
-          borderRadius: 10,
-          margin: 10,
-        }}
-        source={{uri: landmarkObjToDisplay.image}}
-      />
-      {!landmarkObjToDisplay.favourite && (
-        <Icon
-          name="heart-o"
-          size={24}
-          color="red"
-          style={{position: 'absolute', marginTop: '10%', marginLeft: '75%'}}
-        />
+    <MainContainer>
+      <MarkerImage source={{uri: landmarkObjToDisplay.image}} />
+      {!loved && (
+        <HeartMarker onPress={onLoved}>
+          <Icon name="heart-o" size={24} color="red" />
+        </HeartMarker>
       )}
-      {landmarkObjToDisplay.favourite && (
-        <Icon
-          name="heart"
-          size={24}
-          color="red"
-          style={{position: 'absolute', marginTop: '10%', marginLeft: '75%'}}
-        />
+      {loved && (
+        <HeartMarker onPress={onLoved}>
+          <Icon name="heart" size={24} color="red" />
+        </HeartMarker>
       )}
-      <Text style={{fontSize: 40, fontWeight: 'bold'}}>
-        {' '}
-        {landmarkObjToDisplay.name}{' '}
-      </Text>
-      <Text style={{paddingHorizontal: 10, marginVertical: 5}}>
-        {landmarkObjToDisplay.description}{' '}
-      </Text>
-      <Icon.Button
-        name="heart-o"
-        size={24}
-        color="white"
-        backgroundColor="green"
-        onPress={() => setFavouriteLandmarkView(landmarkObjToDisplay.id)}>
-        Add to hearted Landmarks
-      </Icon.Button>
-    </View>
+      <TitleLabel> {landmarkObjToDisplay.name}</TitleLabel>
+      <Description>{landmarkObjToDisplay.description} </Description>
+    </MainContainer>
   );
 };
