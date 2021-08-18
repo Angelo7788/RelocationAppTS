@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, FlatList, TouchableOpacity, Image} from 'react-native';
+import {View, FlatList, TouchableOpacity, Image, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MapView from 'react-native-maps';
+import MapView, {LatLng, MapEvent, Polyline} from 'react-native-maps';
 import {Marker} from 'react-native-maps';
 import {CustomMarkerView} from './CustomMarkerView';
 import api from '../../data/api';
@@ -20,6 +20,7 @@ import {styles} from './styles/LandmarksMapScreenStyles';
 import Styled from 'styled-components/native';
 import {NavigationProp, RouteProp} from '@react-navigation/core';
 import {RootStackParamList} from '../../MainNavigator';
+import {getDistanceBetweenCoords} from '../../utilities/mapUtility';
 
 const MapWrapper = Styled.View`
   height: 78%;
@@ -37,6 +38,41 @@ export type LandmarksMapScreenProps = {
 
 export const LandmarksMapScreen = ({navigation}: LandmarksMapScreenProps) => {
   const LandmarksState = useAppSelector(state => state.landmarks.markersArray);
+
+  const [startPosition, setStartPosition] = useState<LatLng | undefined>();
+  const [markersCoordinate, setMarkersCoordinate] = useState<LatLng[]>([]);
+  const [distance, setDistance] = useState(0);
+
+
+  const onMapPressed: (event: MapEvent) => void = ({
+    nativeEvent: {coordinate},
+  }) => {
+    let markersCopy = [];
+    markersCopy.push(coordinate);
+    LandmarksState.forEach(landmark => {
+      markersCopy.push(landmark.latlng);
+    });
+    setMarkersCoordinate(markersCopy);
+    setDistance(getDistance());
+  };
+
+  if (startPosition) {
+    markersCoordinate.unshift(startPosition);
+  }
+
+  const getDistance = () => {
+    let distance = 0;
+    console.log(markersCoordinate);
+    for (let i = 0; markersCoordinate.length > i+1; i++) {
+      distance += getDistanceBetweenCoords(
+        markersCoordinate[i].latitude,
+        markersCoordinate[i].longitude,
+        markersCoordinate[i + 1].latitude,
+        markersCoordinate[i + 1].longitude,
+      );
+    }
+    return distance;
+  };
 
   const dispatch = useAppDispatch();
   const loadMarkersArray: Function = useCallback(
@@ -108,7 +144,10 @@ export const LandmarksMapScreen = ({navigation}: LandmarksMapScreenProps) => {
         <MapView
           style={styles.map}
           region={region}
+          onPress={onMapPressed}
+          // onPress={(event)=> {console.log(event.nativeEvent.coordinate) }}  for info
           onRegionChange={onRegionChange}>
+          <Polyline coordinates={markersCoordinate} />
           {LandmarksState.map((marker, index) => (
             <Marker
               key={index}
@@ -126,6 +165,7 @@ export const LandmarksMapScreen = ({navigation}: LandmarksMapScreenProps) => {
           ))}
         </MapView>
       </MapWrapper>
+      <Text style={{position: 'absolute', top:80, left:30 }}   > Distance: { distance.toFixed(2) }</Text>
       <View>
         <FlatList
           renderItem={renderItem}
